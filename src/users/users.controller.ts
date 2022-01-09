@@ -7,7 +7,7 @@ import {ApiOkResponse, ApiOperation, ApiProperty, ApiTags} from "@nestjs/swagger
 @Controller('users')
 export class UsersController {
     constructor(
-        private usersService: UsersService
+        private readonly usersService: UsersService
     ) {
     }
 
