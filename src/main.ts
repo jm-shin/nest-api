@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import {ValidationPipe} from "@nestjs/common";
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 4300;
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
       .setTitle('sample')
