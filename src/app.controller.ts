@@ -1,5 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import {Controller, Get} from '@nestjs/common';
+import {AppService} from './app.service';
 
 @Controller('api')
 export class AppController {
@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello(); //TODO: interceptor 구현.
+    return this.appService.getHello();
   }
 }

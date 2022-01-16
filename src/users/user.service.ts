@@ -11,6 +11,6 @@ export class UserService {
   ) {}
 
   async save(data) {
-      return this.userRepository.save(data);
+      return this.userRepository.insert(data);
   }
 }
