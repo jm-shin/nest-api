@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity('user')
 export class UserEntity {
   @PrimaryColumn()
   readonly id: string;
