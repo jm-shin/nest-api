@@ -1,13 +1,13 @@
 import {Body, Controller, HttpCode, Post, UseInterceptors} from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {UsersService} from './users.service';
+import {CreateUserDto} from './dto/create-user.dto';
+import {ApiOkResponse, ApiOperation, ApiTags} from '@nestjs/swagger';
 import {transformInterceptor} from "../common/interceptors/transform.interceptor";
 
 @ApiTags('user')
 @Controller('user')
-export class UserController {
-  constructor(private readonly usersService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({
     summary: '유저 등록',

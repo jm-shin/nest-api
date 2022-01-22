@@ -1,12 +1,12 @@
-import {Column, CreateDateColumn, Entity, PrimaryColumn,} from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryColumn()
   readonly id: string;
 
   @Column()
-  readonly name: string;
+  readonly username: string;
 
   @Column()
   readonly password: string;
