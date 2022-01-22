@@ -7,16 +7,20 @@ import { UsersService } from '../users/users.service';
 import { UserEntity } from '../entities/user.entity';
 import { instanceToPlain } from 'class-transformer';
 import { JwtService } from '@nestjs/jwt';
+import { UserLoginDto } from './dto/user-login.dto';
+import { BcryptService } from '../common/bcrypt/bcrypt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly bcryptService: BcryptService,
   ) {}
 
-  async login(login): Promise<{ jwt: string; user: UserEntity }> {
+  async login(login: UserLoginDto): Promise<{ jwt: string; user: UserEntity }> {
     const user = await this.usersService.findOneByUsername(login.username);
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException('Unknown user');
     }
@@ -24,7 +28,14 @@ export class AuthService {
       throw new BadRequestException();
     }
 
-    //TODO: bcrypt checkEncryptedData
+    if (
+      !(await this.bcryptService.checkEncryptedData(
+        login.password,
+        user.password,
+      ))
+    ) {
+      throw new UnauthorizedException('Wrong Password!');
+    }
     return this.createToken(user);
   }
 
