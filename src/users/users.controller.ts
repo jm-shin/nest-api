@@ -1,8 +1,14 @@
-import {Body, Controller, HttpCode, Post, UseInterceptors} from '@nestjs/common';
-import {UsersService} from './users.service';
-import {CreateUserDto} from './dto/create-user.dto';
-import {ApiOkResponse, ApiOperation, ApiTags} from '@nestjs/swagger';
-import {transformInterceptor} from "../common/interceptors/transform.interceptor";
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { transformInterceptor } from '../common/interceptors/transform.interceptor';
 
 @ApiTags('user')
 @Controller('user')
