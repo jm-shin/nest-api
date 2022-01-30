@@ -14,7 +14,6 @@ export class UsersService {
 
   async save(user) {
     //TODO: 이메일 중복 체크
-
     if (user.password) {
       user.password = await this.bcryptService.hash(user.password);
     }
