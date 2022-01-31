@@ -12,7 +12,7 @@ export class UsersService {
     private bcryptService: BcryptService,
   ) {}
 
-  async save(user) {
+  async createUser(user) {
     //TODO: 이메일 중복 체크
     if (user.password) {
       user.password = await this.bcryptService.hash(user.password);

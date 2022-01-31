@@ -50,7 +50,19 @@ export class AuthService {
     };
   }
 
-  async validateUser(payload): Promise<UserEntity> {
-    return this.usersService.findOneByUsername(payload.username);
+  async validateUser(payload) {
+    const user = await this.usersService.findOneByUsername(payload.username);
+    if (!user) {
+      return null;
+    }
+    const result = await this.bcryptService.checkEncryptedData(
+      payload.password,
+      user.password,
+    );
+    if (result) {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    }
+    return null;
   }
 }

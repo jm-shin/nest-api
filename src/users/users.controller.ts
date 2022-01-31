@@ -24,6 +24,6 @@ export class UsersController {
   @Post('register')
   @UseInterceptors(transformInterceptor)
   async createUser(@Body() body: CreateUserDto) {
-    await this.usersService.save(body);
+    await this.usersService.createUser(body);
   }
 }
