@@ -9,7 +9,7 @@ import {
 } from '../../test/mocks/jest-mock';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -33,28 +33,42 @@ describe('AuthService', () => {
     jwtService = module.get(JwtService);
   });
 
-  it('should reject login if user not found', async () => {
-    bcryptService.checkEncryptedData.mockReturnValue(false);
-    userService.findOneByUsername.mockReturnValue(null);
-    await expect(
-      service.login({ username: 'user', password: '' }),
-    ).rejects.toThrow(UnauthorizedException);
-    expect(userService.findOneByUsername).toBeCalledWith('user');
-  });
-
-  it('should reject login if password is wrong', async () => {
-    bcryptService.checkEncryptedData.mockReturnValue(false);
-    userService.findOneByUsername.mockReturnValue({
-      username: 'user',
-      password: 'encrypted',
+  describe('로그인 시, ', () => {
+    it('유저를 찾을 수 없는 경우 로그인을 거부해야 합니다.', async () => {
+      bcryptService.checkEncryptedData.mockReturnValue(false);
+      userService.findOneByUsername.mockReturnValue(null);
+      await expect(
+        service.login({ username: 'user', password: '' }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(userService.findOneByUsername).toBeCalledWith('user');
     });
-    await expect(
-      service.login({ username: 'user', password: 'password' }),
-    ).rejects.toThrow(UnauthorizedException);
-    expect(userService.findOneByUsername).toBeCalledWith('user');
-    expect(bcryptService.checkEncryptedData).toBeCalledWith(
-      'password',
-      'encrypted',
-    );
+
+    it('암호가 잘못된 경우 로그인을 거부해야 합니다.', async () => {
+      bcryptService.checkEncryptedData.mockReturnValue(false);
+      userService.findOneByUsername.mockReturnValue({
+        username: 'user',
+        password: 'encrypted',
+      });
+      await expect(
+        service.login({ username: 'user', password: 'password' }),
+      ).rejects.toThrow(UnauthorizedException);
+      expect(userService.findOneByUsername).toBeCalledWith('user');
+      expect(bcryptService.checkEncryptedData).toBeCalledWith(
+        'password',
+        'encrypted',
+      );
+    });
+
+    it('암호가 아닌 계정인 경우 로그인을 거부해야 합니다.', async () => {
+      userService.findOneByUsername.mockReturnValueOnce({
+        username: 'user',
+        password: null,
+      });
+      bcryptService.checkEncryptedData.mockReturnValueOnce(false);
+      await expect(
+        service.login({ username: 'user', password: 'password' }),
+      ).rejects.toThrow(BadRequestException);
+      expect(userService.findOneByUsername).toBeCalledWith('user');
+    });
   });
 });
