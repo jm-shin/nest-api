@@ -107,5 +107,18 @@ describe('AuthService', () => {
         }),
       ).toEqual(null);
     });
+    it('패스워드를 제외한 정보를 반환해야 합니다.', async () => {
+      const user = {
+        username: 'user',
+        password: 'encrypt',
+      };
+      userService.findOneByUsername.mockReturnValue(user);
+      bcryptService.checkEncryptedData.mockReturnValueOnce(true);
+      expect(
+        await service.validateUser({
+          username: 'user',
+        }),
+      ).toEqual({ username: 'user' });
+    });
   });
 });
