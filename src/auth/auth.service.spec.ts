@@ -32,7 +32,7 @@ describe('AuthService', () => {
     userService = module.get(UsersService);
     jwtService = module.get(JwtService);
   });
-
+  //login
   describe('로그인 시, ', () => {
     it('유저를 찾을 수 없는 경우 로그인을 거부해야 합니다.', async () => {
       bcryptService.checkEncryptedData.mockReturnValue(false);
@@ -69,6 +69,43 @@ describe('AuthService', () => {
         service.login({ username: 'user', password: 'password' }),
       ).rejects.toThrow(BadRequestException);
       expect(userService.findOneByUsername).toBeCalledWith('user');
+    });
+
+    it('올바른 자격증명에 대해서 로그인을 허용해야 합니다.', async () => {
+      bcryptService.checkEncryptedData.mockReturnValueOnce(true);
+      jwtService.sign.mockReturnValue('token');
+      const user = {
+        username: 'user',
+        password: 'encrypt',
+      };
+      userService.findOneByUsername.mockReturnValue(user);
+      const token = await service.login({
+        username: 'user',
+        password: 'password',
+      });
+      expect(token).toEqual({
+        jwt: 'token',
+        user: expect.objectContaining({
+          username: 'user',
+        }),
+      });
+      expect(userService.findOneByUsername).toBeCalledWith('user');
+      expect(bcryptService.checkEncryptedData).toBeCalledWith(
+        'password',
+        'encrypt',
+      );
+    });
+  });
+  //validateUser
+  describe('유저 검증시,', () => {
+    it('유저정보가 없다면 null을 반환해야 합니다.', async () => {
+      userService.findOneByUsername.mockReturnValueOnce(null);
+      expect(
+        await service.validateUser({
+          username: 'notExistUserName',
+          password: 'password',
+        }),
+      ).toEqual(null);
     });
   });
 });
