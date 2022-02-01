@@ -61,6 +61,6 @@ describe('UsersService', () => {
       age: 30,
     };
     const newUser = Object.assign({}, user, { password: 'hashed' });
-    expect(await service.save(user)).toEqual(newUser);
+    expect(await service.createUser(user)).toEqual(newUser);
   });
 });

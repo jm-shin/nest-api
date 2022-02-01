@@ -1,4 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { ApiHideProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 @Entity('user')
 export class UserEntity {
@@ -8,7 +10,9 @@ export class UserEntity {
   @Column()
   readonly username: string;
 
+  @Exclude()
   @Column()
+  @ApiHideProperty()
   readonly password: string;
 
   @Column()
