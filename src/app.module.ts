@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule } from './config/config.module';
-import { BcryptService } from './common/bcrypt/bcrypt.service';
+import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
+import Configuration from './config/configuration';
 
 @Module({
   imports: [
@@ -19,12 +15,13 @@ import { CommonModule } from './common/common.module';
           autoLoadEntities: true,
         }),
     }),
+    ConfigModule.forRoot({
+      load: [Configuration],
+    }),
     UsersModule,
     AuthModule,
     ConfigModule,
     CommonModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService, BcryptService],
 })
 export class AppModule {}
