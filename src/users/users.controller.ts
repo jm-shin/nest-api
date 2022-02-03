@@ -1,16 +1,9 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserCreateDto } from './dto/user-create.dto';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { transformInterceptor } from '../common/interceptors/transform.interceptor';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UserEntity } from '../entities/user.entity';
 
 @ApiTags('user')
 @Controller('user')
@@ -25,8 +18,7 @@ export class UsersController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   @Post('register')
-  @UseInterceptors(transformInterceptor)
-  async createUser(@Body() body: CreateUserDto) {
-    await this.usersService.createUser(body);
+  createUser(@Body() user: UserCreateDto): Promise<UserEntity> {
+    return this.usersService.createUser(user);
   }
 }

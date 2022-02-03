@@ -8,5 +8,4 @@ export interface EnvConfig {
 export class ConfigService {
     private readonly envConfig: EnvConfig  = {}
     private readonly logger: Logger = new Logger(ConfigService.name);
-    
 }

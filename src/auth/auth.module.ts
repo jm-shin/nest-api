@@ -5,12 +5,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import { CommonModule } from '../common/common.module';
 import { JwtStrategy } from './jwt.strategy';
-import configuration from '../config/configuration';
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: configuration().jwtSecretKey,
+      secret: process.env.JWT_SECRET_KEY,
       signOptions: { expiresIn: '7d' },
     }),
     UsersModule,

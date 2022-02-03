@@ -36,7 +36,7 @@ export class AuthService {
     ) {
       throw new UnauthorizedException('Wrong Password!');
     }
-    return this.createToken(user);
+    return await this.createToken(user);
   }
 
   async createToken(user: UserEntity) {

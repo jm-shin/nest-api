@@ -5,7 +5,6 @@ import { getConnectionOptions } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
-import Configuration from './config/configuration';
 
 @Module({
   imports: [
@@ -15,9 +14,7 @@ import Configuration from './config/configuration';
           autoLoadEntities: true,
         }),
     }),
-    ConfigModule.forRoot({
-      load: [Configuration],
-    }),
+    ConfigModule.forRoot(),
     UsersModule,
     AuthModule,
     ConfigModule,

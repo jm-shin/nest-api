@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { BcryptService } from '../common/bcrypt/bcrypt.service';
 import { UserEntity } from '../entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserCreateDto } from './dto/user-create.dto';
 
 class MockUserRepository {
   insert(user) {
@@ -52,7 +52,7 @@ describe('UsersService', () => {
   });
 
   it('유저 정보를 저장한다. ', async () => {
-    const user: CreateUserDto = {
+    const user: UserCreateDto = {
       id: 'user1234',
       username: 'hong gil dong',
       password: 'password',
