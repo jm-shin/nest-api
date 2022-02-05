@@ -16,9 +16,6 @@ export class UserEntity {
   readonly password: string;
 
   @Column()
-  readonly age: number;
-
-  @Column()
   readonly email: string;
 
   @Column()

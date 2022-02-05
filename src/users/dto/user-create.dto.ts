@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsDefined, IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserCreateDto {
@@ -46,13 +46,4 @@ export class UserCreateDto {
     required: true,
   })
   readonly email: string;
-
-  @IsDefined()
-  @IsNumber()
-  @ApiProperty({
-    example: 20,
-    description: '유저 연령',
-    required: true,
-  })
-  readonly age: number;
 }
