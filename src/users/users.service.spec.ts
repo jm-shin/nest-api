@@ -41,7 +41,7 @@ describe('UsersService', () => {
     it('유저 정보를 저장해야 합니다. ', async () => {
       const user: UserCreateDto = {
         id: 'user1234',
-        username: 'jongminshin',
+        username: 'user',
         password: 'password',
         department: 'dev',
         email: 'test@email.com',
@@ -53,7 +53,7 @@ describe('UsersService', () => {
     it('중복된 유저네임은 거절해야 합니다.', async () => {
       const user: UserCreateDto = {
         id: 'user1234',
-        username: 'jongminshin',
+        username: 'user',
         password: 'password',
         department: 'dev',
         email: 'test@email.com',
@@ -70,7 +70,7 @@ describe('UsersService', () => {
     it('중복된 메일 주소는 거부해야 합니다.', async () => {
       const user: UserCreateDto = {
         id: 'user1234',
-        username: 'jongminshin',
+        username: 'user',
         password: 'password',
         department: 'dev',
         email: 'test@email.com',
@@ -85,6 +85,20 @@ describe('UsersService', () => {
         expect(e.response.error).toContain('email');
         expect(repositoryMock.findOne).toHaveBeenCalledTimes(2);
       }
+    });
+    it('이메일 주소가 없어도, 유저등록을 허용해야 합니다.', async () => {
+      const user: UserCreateDto = {
+        id: 'user1234',
+        password: 'password',
+        username: 'user',
+        department: 'dev',
+      };
+      repositoryMock.findOne.mockImplementation((d) =>
+        d.hasOwnProperty('email') ? user : null,
+      );
+      await service.createUser(user);
+      expect(repositoryMock.findOne).toHaveBeenCalledTimes(1);
+      expect(repositoryMock.save).toHaveBeenCalledTimes(1);
     });
   });
 });

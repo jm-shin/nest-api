@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsString } from 'class-validator';
+import { IsDefined, IsEmail, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserCreateDto {
@@ -38,12 +38,12 @@ export class UserCreateDto {
   })
   readonly department: string;
 
-  @IsDefined()
+  @IsOptional()
   @IsEmail()
   @ApiProperty({
     example: 'id@email.com',
     description: '이메일',
     required: true,
   })
-  readonly email: string;
+  readonly email?: string;
 }
