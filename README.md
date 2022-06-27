@@ -1,4 +1,4 @@
-# NestJS API
+# Nest.js API
 
 - Angular 구조
 - passport-jwt 인증 구현
@@ -60,6 +60,14 @@
 ├── tsconfig.build.json
 └── tsconfig.json
 ````
+
+|||
+|---|---|
+|app.controller.ts|단일 경로가 있는 기본 컨트롤러|
+|app.controller.spec.ts|컨트롤러 단위 테스트|
+|app.module.ts|애플리케이션 루트 모듈|
+|app.service.ts|단일 방법으로 기본 서비스|
+|main.ts|핵심 함수 NestFactory를 사용하여 Nest 애플리케이션 인스턴스를 만드는 엔트리 파일|
 
 ### API 정의
 
