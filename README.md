@@ -1,6 +1,5 @@
 # Nest.js API
 
-- Angular 구조
 - passport-jwt 인증 구현
 - bcrypt 암호화
 - jest, jest-mock 코드 테스트 구현 (unit, e2e)
