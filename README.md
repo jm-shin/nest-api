@@ -78,71 +78,63 @@
 
 ```javascript
 describe('createUser', () => {
-  it('유저 정보를 저장해야 합니다. ', async () => {
-    const user: UserCreateDto = {
-      id: 'user1234',
-      username: 'user',
-      password: 'password',
-      department: 'dev',
-      email: 'test@email.com',
-    };
-    bcryptService.hash.mockReturnValue('hashed');
-    const newUser = Object.assign({}, user, { password: 'hashed' });
-    expect(await service.createUser(user)).toEqual(newUser);
-  });
+    it('유저 정보를 저장해야 합니다. ', async () => {
+        const user: UserCreateDto = {
+            id: 'user1234',
+            username: 'user',
+            password: 'password',
+            department: 'dev',
+            email: 'test@email.com',
+        };
+        bcryptService.hash.mockReturnValue('hashed');
+        const newUser = Object.assign({}, user, { password: 'hashed' });
+        expect(await service.createUser(user)).toEqual(newUser);
+    });
+    it('중복된 유저네임은 거절해야 합니다.', async () => {
+        const user: UserCreateDto = {
+            id: 'user1234',
+            username: 'user',
+            password: 'password',
+            department: 'dev',
+            email: 'test@email.com',
+        };
+        repositoryMock.findOne.mockReturnValue(user);
 
-  it('중복된 유저네임은 거절해야 합니다.', async () => {
-    const user: UserCreateDto = {
-      id: 'user1234',
-      username: 'user',
-      password: 'password',
-      department: 'dev',
-      email: 'test@email.com',
-    };
-    repositoryMock.findOne.mockReturnValue(user);
-    try {
-      await service.createUser(user);
-      fail(BadRequestException);
-    } catch (e) {
-      expect(e).toBeInstanceOf(BadRequestException);
-      expect(e.response.error).toContain('username');
-    }
-  });
+        await expect(async () => {
+            await service.createUser(user);
+        }).rejects.toThrow(BadRequestException);
+    });
+    it('중복된 메일 주소는 거부해야 합니다.', async () => {
+        const user: UserCreateDto = {
+            id: 'user1234',
+            username: 'user',
+            password: 'password',
+            department: 'dev',
+            email: 'test@email.com',
+        };
+        repositoryMock.findOne.mockReturnValueOnce(null);
+        repositoryMock.findOne.mockReturnValueOnce(user);
 
-  it('중복된 메일 주소는 거부해야 합니다.', async () => {
-    const user: UserCreateDto = {
-      id: 'user1234',
-      username: 'user',
-      password: 'password',
-      department: 'dev',
-      email: 'test@email.com',
-    };
-    repositoryMock.findOne.mockReturnValueOnce(null);
-    repositoryMock.findOne.mockReturnValueOnce(user);
-    try {
-      await service.createUser(user);
-      fail(BadRequestException);
-    } catch (e) {
-      expect(e).toBeInstanceOf(BadRequestException);
-      expect(e.response.error).toContain('email');
-      expect(repositoryMock.findOne).toHaveBeenCalledTimes(2);
-    }
-  });
+        await expect(async () => {
+            await service.createUser(user);
+        }).rejects.toThrow(BadRequestException);
 
-  it('이메일 주소가 없어도, 유저등록을 허용해야 합니다.', async () => {
-    const user: UserCreateDto = {
-      id: 'user1234',
-      password: 'password',
-      username: 'user',
-      department: 'dev',
-    };
-    repositoryMock.findOne.mockImplementation((d) =>
-      d.hasOwnProperty('email') ? user : null,
-    );
-    await service.createUser(user);
-    expect(repositoryMock.findOne).toHaveBeenCalledTimes(1);
-    expect(repositoryMock.save).toHaveBeenCalledTimes(1);
-  });
+        expect(repositoryMock.findOne).toHaveBeenCalledTimes(2);
+    });
+    it('이메일 주소가 없어도, 유저등록을 허용해야 합니다.', async () => {
+        const user: UserCreateDto = {
+            id: 'user1234',
+            password: 'password',
+            username: 'user',
+            department: 'dev',
+        };
+        repositoryMock.findOne.mockImplementation((d) =>
+            d.hasOwnProperty('email') ? user : null,
+        );
+        await service.createUser(user);
+        expect(repositoryMock.findOne).toHaveBeenCalledTimes(1);
+        expect(repositoryMock.save).toHaveBeenCalledTimes(1);
+    });
 });
 ```
 

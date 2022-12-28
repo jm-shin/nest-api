@@ -59,13 +59,10 @@ describe('UsersService', () => {
         email: 'test@email.com',
       };
       repositoryMock.findOne.mockReturnValue(user);
-      try {
+
+      await expect(async () => {
         await service.createUser(user);
-        fail(BadRequestException);
-      } catch (e) {
-        expect(e).toBeInstanceOf(BadRequestException);
-        expect(e.response.error).toContain('username');
-      }
+      }).rejects.toThrow(BadRequestException);
     });
     it('중복된 메일 주소는 거부해야 합니다.', async () => {
       const user: UserCreateDto = {
@@ -77,14 +74,12 @@ describe('UsersService', () => {
       };
       repositoryMock.findOne.mockReturnValueOnce(null);
       repositoryMock.findOne.mockReturnValueOnce(user);
-      try {
+
+      await expect(async () => {
         await service.createUser(user);
-        fail(BadRequestException);
-      } catch (e) {
-        expect(e).toBeInstanceOf(BadRequestException);
-        expect(e.response.error).toContain('email');
-        expect(repositoryMock.findOne).toHaveBeenCalledTimes(2);
-      }
+      }).rejects.toThrow(BadRequestException);
+
+      expect(repositoryMock.findOne).toHaveBeenCalledTimes(2);
     });
     it('이메일 주소가 없어도, 유저등록을 허용해야 합니다.', async () => {
       const user: UserCreateDto = {
